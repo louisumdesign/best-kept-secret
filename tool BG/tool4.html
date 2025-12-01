@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HELLO WORLD Overlap</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+</head>
+<body>
+<script>
+let pgHello, pgWorld;
+let imgHello, imgWorld;
+
+function setup() {
+  createCanvas(600, 400);
+  textSize(100);
+  textAlign(CENTER, CENTER);
+  noStroke();
+}
+
+function draw() {
+  background(60); // gray background
+
+  // --- Draw HELLO to offscreen buffer ---
+  pgHello = createGraphics(width, height);
+  pgHello.clear();
+  pgHello.fill(255); // white text
+  pgHello.textSize(100);
+  pgHello.textAlign(CENTER, CENTER);
+  pgHello.text("HELLO", width / 2, height / 2);
+  imgHello = pgHello.get();
+
+  // --- Draw WORLD to offscreen buffer ---
+  pgWorld = createGraphics(width, height);
+  pgWorld.clear();
+  pgWorld.fill(255); // white text
+  pgWorld.textSize(100);
+  pgWorld.textAlign(CENTER, CENTER);
+  pgWorld.text("WORLD", mouseX, mouseY);
+  imgWorld = pgWorld.get();
+
+  // --- Draw both texts normally ---
+  image(imgHello, 0, 0);
+  image(imgWorld, 0, 0);
+
+  // --- Compute overlap and draw black ---
+  imgHello.loadPixels();
+  imgWorld.loadPixels();
+  loadPixels(); // load main canvas pixels
+  for (let i = 0; i < pixels.length; i += 4) {
+    let helloVisible = imgHello.pixels[i] > 0; // R channel
+    let worldVisible = imgWorld.pixels[i] > 0; // R channel
+    if (helloVisible && worldVisible) {
+      pixels[i] = 0;     // R
+      pixels[i + 1] = 0; // G
+      pixels[i + 2] = 0; // B
+      pixels[i + 3] = 255; // Alpha
+    }
+  }
+  updatePixels();
+}
+</script>
+</body>
+</html>

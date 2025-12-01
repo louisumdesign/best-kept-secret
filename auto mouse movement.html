@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>my first website</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <p>
+            X: <span id="x-value"></span>
+        </p>
+        <p>
+            Y: <span id="y-value"></span>
+        </p>
+        <script type="text/javascript">
+            window.addEventListener('mousemove', function (e) {
+                document.getElementById('x-value').textContent = e.x;
+                document.getElementById('y-value').textContent = e.y;
+            });
+        </script>
+
+        <img src="big image draft 1.png" alt="draft1"
+        style="position:absolute;
+        top:0px;
+        bottom:0px;
+        right:0px;
+        left:0px;
+        width: 15000px;
+        height: 1080px;
+        float:none">
+            
+         transition: transform 0.1s ease-out;
+
+            <script>
+    const body = document.body;
+
+    document.addEventListener('mousemove', (e) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - .5) * 300;  // max 30px shift
+      const y = (e.clientY / innerHeight - .5) * 300;
+
+      body.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  </script> Sunt ex eius similique soluta repellat porro optio.</p> 
+  
+    </body>
+
+
+</html>
+
+
+

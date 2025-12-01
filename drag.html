@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smooth Click & Drag</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: black;
+      cursor: grab;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    body.dragging {
+      cursor: grabbing;
+    }
+
+    #canvas img {
+      user-select: none;
+      pointer-events: none;
+      object-fit: contain;
+    }
+
+    .main-image1 {
+      position:absolute;
+      top: -400px;
+      left:0px;
+      width: 15000;
+      height: 1700px;
+      object-fit: contain;
+    }
+
+    .black-box {
+  position: absolute;
+  top: 250px;      
+  left: 8465px;
+  width: 270px;
+  height: 300px; 
+  background: rgba(0, 0, 0, 1); 
+  z-index: 20;      
+  pointer-events: none; 
+}
+
+    .main-image2 {
+      position:absolute;
+      top: -400px;
+      left:15000px;
+      width: 15000;
+      height: 1700px;
+      object-fit: contain;
+    }
+
+    .paper {
+      position:absolute;
+      top: -210px;
+      left:8330px;
+      width: 258px;
+      height: 1700px;
+      object-fit: contain;
+      z-index: 40;
+    }
+
+    .paper2 {
+      position:absolute;
+      top: 200px;
+      left:11532px;
+      width: 258px;
+      height: 1700px;
+      transform: rotate(-90deg); /* rotates 45 degrees clockwise */
+      transform-origin: center;
+      object-fit: contain;
+      z-index: 45;
+    }
+
+    .black-box2 {
+  position: absolute;
+  top: 700px;      
+  left: 11820px;
+  width: 270px;
+  height: 300px; 
+  background: rgb(0, 0, 0); 
+  z-index: 20;      
+  pointer-events: none; 
+}
+
+    .candleholder1 {
+      position:absolute;
+      top: 550px;
+      left:4500px;
+      width: 700px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .road-video {
+      position:absolute;
+      top: -200px;
+      left:905px;
+      width: 540px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .wind-landscape {
+      position:absolute;
+      top: -150px;
+      left:17000px;
+      width: 1500px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .wide-lichen {
+      position:absolute;
+      top: 0px;
+      left:12400px;
+      width: 960px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .rock-lichen {
+      position:absolute;
+      top: -160px;
+      left:12600px;
+      width: 325px;
+      height: auto;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .wind-square {
+      position:absolute;
+      top: 34px;
+      left:18147px;
+      width: 549px;
+      height: auto;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .wind-water {
+      position:absolute;
+      top: 34px;
+      left:18697px;
+      width: 549px;
+      height: auto;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .river-1 {
+      position:absolute;
+      top: 732px;
+      left:17887px;
+      width: 350px;
+      height: auto;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .river-2 {
+      position:absolute;
+      top: 605px;
+      left:18146px;
+      width: 820px;
+      height: auto;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .jake-river {
+      position:absolute;
+      top: 929px;
+      left:17586px;
+      width: 538px;
+      height: auto;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .smooth-water {
+      position:absolute;
+      top: 975px;
+      left:18986px;
+      width: 260px;
+      height: auto;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .rippled-water {
+      position:absolute;
+      top: 646px;
+      left:19267px;
+      width: 540px;
+      height: auto;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .fog-move {
+      position:absolute;
+      top: 152px;
+      left:18994px;
+      width: 531px;
+      height: auto;
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    .tree-sun {
+      position:absolute;
+      top: 210px;
+      left:25148px;
+      width: 540px;
+      height: auto;
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    .mini-fall {
+      position:absolute;
+      top: -269px;
+      left:25428px;
+      width: 543px;
+      height: auto;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      will-change: transform;
+    }
+
+    
+  </style>
+</head>
+<body>
+
+  <div id="canvas">
+    <div class="black-box"></div>
+    <div class="black-box2"></div>
+    <img src="Main image for web.png" alt="main1" class="main-image1" />
+    <img src="Paper.png" alt="paper" class="paper" />
+    <img src="Paper2.png" alt="paper" class="paper2" />
+    <img src="Main image for web2.png" alt="main2" class="main-image2" />
+    <img src="candleholder1.gif" alt="candleholder1" class="candleholder1"/>
+    <img src="road-video.gif" alt="road" class="road-video" />  
+    <img src="Landscape.gif" alt="windlandscape" class="wind-landscape" />
+    <img src="Landscape-Lichen.gif" alt="widelichen" class="wide-lichen" />
+    <img src="Lichen-on-rock.gif" alt="lichenrock" class="rock-lichen" />
+    <img src="Wind+water.gif" alt="windwater" class="wind-water" />
+    <img src="smooth.gif" alt="smoothwater" class="smooth-water" />
+    <img src="rippled.gif" alt="rippledwater" class="rippled-water" />
+    <video src="MP4 - windsquare.mp4" alt="windsquare" class="wind-square" 
+    autoplay
+  loop
+  muted
+  playsinline></video>   
+  <video src="river1.mp4" alt="river1" class="river-1" 
+    autoplay
+  loop
+  muted
+  playsinline></video>   
+  <video src="river2.mp4" alt="river2" class="river-2" 
+    autoplay
+  loop
+  muted
+  playsinline></video>   
+  <video src="Jake on rocks.mp4" alt="jakeriver" class="jake-river" 
+    autoplay
+  loop
+  muted
+  playsinline></video>  
+  <video src="fog move.mp4" alt="fogmove" class="fog-move" 
+    autoplay
+  loop
+  muted
+  playsinline></video> 
+  <video src="tree sun.mp4" alt="treesun" class="tree-sun" 
+    autoplay
+  loop
+  muted
+  playsinline></video> 
+  <video src="minifall.mp4" alt="minifall" class="mini-fall" 
+    autoplay
+  loop
+  muted
+  playsinline></video> 
+    </div>
+
+    <audio id="stove-on" src="Stove on.wav" preload="auto"></audio>
+    <audio id="wind1" src="Wind1.wav" preload="auto"></audio>
+    <audio id="howff-ambience" src="Howff ambience.wav" preload="auto"></audio>
+    <audio id="footsteps" src="Howff ambience 3 footsteps edition.wav" preload="auto"></audio>
+    <audio id="writing2" src="wind and writing 2.wav" preload="auto"></audio>
+    <audio id="purpose" src="purpose, preserving deer, and society.wav" preload="auto"></audio>
+    <audio id="heather" src="brushing heather.wav" preload="auto"></audio>
+    <audio id="outside-howff" src="outside howff ambience.wav" preload="auto"></audio>
+    <audio id="big-river" src="big river ambience.wav" preload="auto"></audio>
+    <audio id="drip" src="drip.wav" preload="auto"></audio>
+    <audio id="inside-water" src="inside water.wav" preload="auto"></audio>
+    <audio id="mini-river" src="miniriver.wav" preload="auto"></audio>
+    <audio id="outside-howff" src="outside howff ambience.wav" preload="auto"></audio>
+    <audio id="rain-roof" src="rain on roof.wav" preload="auto"></audio>
+    <audio id="waterrock1" src="water in rock1.wav" preload="auto"></audio>
+    <audio id="waterrock2" src="water in rock2.wav" preload="auto"></audio>
+    <audio id="blow" src="Howff ambience 4 blowing.wav" preload="auto"></audio>
+    <audio id="headtorches" src="headtorches.wav" preload="auto"></audio>
+    <audio id="wind-summit" src="wind on summit.wav" preload="auto"></audio>
+    <audio id="porridge" src="porridge thru nose.wav" preload="auto"></audio>
+    <audio id="soupfortea" src="soufortea.wav" preload="auto"></audio>
+    <audio id="soupstew" src="soupstew.wav" preload="auto"></audio>
+    <audio id="could-live" src="could you live here.wav" preload="auto"></audio>
+    <audio id="jake-art" src="jake making art.wav" preload="auto"></audio>
+    <audio id="cheese" src="mature cheddar cheese.wav" preload="auto"></audio>
+    <audio id="bothy-book" src="stormy, reading bothy book.wav" preload="auto"></audio>
+    <audio id="wading-story" src="wading story.wav" preload="auto"></audio>
+    <audio id="always-lived" src="we've always lived in howffs.wav" preload="auto"></audio>
+    <audio id="hobbits" src="hobbits.wav" preload="auto"></audio>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+
+    const hotspots = [
+      {  
+        x: 1500, 
+        y: 100, 
+        width: 600, 
+        height: 600,
+        sound: document.getElementById("headtorches"),
+        wasInside: false
+      },
+      {  
+        x: 4530, 
+        y: 30, 
+        width: 275, 
+        height: 400,
+        sound: document.getElementById("stove-on"),
+        wasInside: false
+      },
+      {
+        x:3700,
+        y:175,
+        width:1825,
+        height:550,
+        sound:document.getElementById("howff-ambience"),
+        wasInside: false
+      },
+      {
+        x:4500,
+        y:300,
+        width:600,
+        height:550,
+        sound:document.getElementById("blow"),
+        wasInside: false
+      },
+      {
+        x:7340,
+        y:540,
+        width:265,
+        height:380,
+        sound:document.getElementById("footsteps"),
+        wasInside: false
+      },
+      {
+        x:7620,
+        y:380,
+        width:1200,
+        height:450,
+        sound:document.getElementById("writing2"),
+        wasInside: false
+      },
+      {
+        x:8750,
+        y:575,
+        width:3100,
+        height:175,
+        sound:document.getElementById("purpose"),
+        wasInside: false
+      },
+      {
+        x:12600,
+        y:100,
+        width:1900,
+        height:900,
+        sound:document.getElementById("heather"),
+        wasInside: false
+      },
+      {
+        x:15050,
+        y:-350,
+        width:2500,
+        height:1600,
+        sound:document.getElementById("outside-howff"),
+        wasInside: false
+      },
+      {
+        x:17000,
+        y:-200,
+        width:2800,
+        height:800,
+        sound:document.getElementById("wind1"),
+        wasInside: false
+      },
+      {
+        x:17600,
+        y:900,
+        width:700,
+        height:350,
+        sound:document.getElementById("big-river"),
+        wasInside: false
+      },
+      {
+        x:17900,
+        y:700,
+        width:700,
+        height:350,
+        sound:document.getElementById("waterrock1"),
+        wasInside: false
+      },
+      {
+        x:18500,
+        y:500,
+        width:900,
+        height:550,
+        sound:document.getElementById("inside-water"),
+        wasInside: false
+      },
+      {
+        x:18800,
+        y:0,
+        width:900,
+        height:550,
+        sound:document.getElementById("rain-roof"),
+        wasInside: false
+      },
+      {
+        x:19200,
+        y:600,
+        width:600,
+        height:600,
+        sound:document.getElementById("rain-roof"),
+        wasInside: false
+      },
+      {
+        x:20500,
+        y:-500,
+        width:1200,
+        height:2000,
+        sound:document.getElementById("wind-summit"),
+        wasInside: false
+      },
+      {
+        x:21500,
+        y:-250,
+        width:250,
+        height:300,
+        sound:document.getElementById("porridge"),
+        wasInside: false
+      },
+      {
+        x:21500,
+        y:50,
+        width:250,
+        height:300,
+        sound:document.getElementById("soupfortea"),
+        wasInside: false
+      },
+      {
+        x:21790,
+        y:400,
+        width:700,
+        height:400,
+        sound:document.getElementById("could-live"),
+        wasInside: false
+      },
+      {
+        x:22050,
+        y:-350,
+        width:550,
+        height:750,
+        sound:document.getElementById("jake-art"),
+        wasInside: false
+      },
+      {
+        x:23450,
+        y:-250,
+        width:400,
+        height:750,
+        sound:document.getElementById("hobbits"),
+        wasInside: false
+      },
+      {
+        x:24300,
+        y:-150,
+        width:275,
+        height:750,
+        sound:document.getElementById("cheese"),
+        wasInside: false
+      },
+      {
+        x:24575,
+        y:0,
+        width:275,
+        height:750,
+        sound:document.getElementById("wading-story"),
+        wasInside: false
+      },
+      {
+        x:24850,
+        y:0,
+        width:275,
+        height:750,
+        sound:document.getElementById("always-lived"),
+        wasInside: false
+      },
+      {
+        x:26850,
+        y:-200,
+        width:2000,
+        height:1500,
+        sound:document.getElementById("bothy-book"),
+        wasInside: false
+      },
+      {
+        x:25000,
+        y:-350,
+        width:2000,
+        height:1600,
+        sound:document.getElementById("outside-howff"),
+        wasInside: false
+      },
+      {
+        x:25400,
+        y:-350,
+        width:700,
+        height:500,
+        sound:document.getElementById("mini-river"),
+        wasInside: false
+      },
+    ];
+
+    let isDragging = false;
+    let startX, startY;
+    let currentX = 0, currentY = 0;
+    let targetX = 0, targetY = 0;
+    let velocityX = 0, velocityY = 0;
+    const friction = 0.9;
+    const lerpFactor = 0.15;
+
+    function fadeIn(audio, duration = 1000, targetVolume = 1.0) {
+      audio.play();
+      audio.volume = 0;
+      const step = targetVolume / (duration / 50);
+      clearInterval(audio.fadeInterval);
+      audio.fadeInterval = setInterval(() => {
+        if (audio.volume < targetVolume) {
+          audio.volume = Math.min(audio.volume + step, targetVolume);
+        } else {
+          clearInterval(audio.fadeInterval);
+        }
+      }, 50);
+    }
+
+    function fadeOut(audio, duration = 1000) {
+  const step = audio.volume / (duration / 50);
+  clearInterval(audio.fadeInterval);
+  audio.fadeInterval = setInterval(() => {
+    if (audio.volume > 0) {
+      audio.volume = Math.max(audio.volume - step, 0);
+    } else {
+      clearInterval(audio.fadeInterval);
+      audio.pause();
+    }
+  }, 50);
+}
+
+function fadeOutWithDelay(audio, delay = 3000, duration = 2000) {
+    clearTimeout(audio.fadeOutTimeout);
+    audio.fadeOutTimeout = setTimeout(() => {
+      fadeOut(audio, duration);
+    }, delay);
+  }
+
+document.getElementById("wind1").volume = 0.3;
+document.getElementById("big-river").volume = 0.3;
+
+    hotspots.forEach((h) => {
+    const box = document.createElement("div");
+    box.classList.add("hotspot-box");
+    box.style.position = "absolute";
+    box.style.left = h.x + "px";
+    box.style.top = h.y + "px";
+    box.style.width = h.width + "px";
+    box.style.height = h.height + "px";
+    box.style.border = "2px dashed red";
+    box.style.background = "rgba(255, 0, 0, 0.2)";
+    box.style.zIndex = 9999;
+    canvas.appendChild(box);
+    h.debugBox = box;
+  });
+
+  let showHotspots = true;
+  document.addEventListener("keydown", (e) => {
+    if (e.key.toLowerCase() === "h") {
+      showHotspots = !showHotspots;
+      hotspots.forEach(h => {
+        h.debugBox.style.display = showHotspots ? "block" : "none";
+      });
+    }
+  });
+    
+    document.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      document.body.classList.add("dragging");
+      startX = e.clientX - targetX;
+      startY = e.clientY - targetY;
+    });
+
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+      document.body.classList.remove("dragging");
+    });
+
+    document.addEventListener("mouseleave", () => {
+      isDragging = false;
+      document.body.classList.remove("dragging");
+    });
+
+    document.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    const x = e.clientX - startX;
+    const y = e.clientY - startY;
+    velocityX = x - targetX;
+    velocityY = y - targetY;
+    targetX = x;
+    targetY = y;
+    console.log(`Mouse X: ${e.clientX}, Mouse Y: ${e.clientY}`);
+  }
+
+  const imageX = e.clientX - currentX;
+  const imageY = e.clientY - currentY;
+
+  hotspots.forEach(h => {
+  const inside =
+    imageX > h.x &&
+    imageX < h.x + h.width &&
+    imageY > h.y &&
+    imageY < h.y + h.height;
+
+  // only handle this hotspot's own state
+  if (inside && !h.wasInside) {
+    h.wasInside = true;
+    clearTimeout(h.sound.fadeOutTimeout);
+    fadeIn(h.sound, 2000, 0.6);
+  } 
+  else if (!inside && h.wasInside) {
+    h.wasInside = false;
+    fadeOutWithDelay(h.sound, 3000, 2000);
+  }
+});
+});
+  
+    function animate() {
+      // Smooth interpolation
+      currentX += (targetX - currentX) * lerpFactor;
+      currentY += (targetY - currentY) * lerpFactor;
+
+      // Inertia effect
+      if (!isDragging) {
+        targetX += velocityX * friction;
+        targetY += velocityY * friction;
+        velocityX *= friction;
+        velocityY *= friction;
+      }
+
+      canvas.style.transform = `translate(${currentX}px, ${currentY}px)`;
+
+      requestAnimationFrame(animate);
+    }
+
+    animate(); // start the loop
+
+// --- MOUSE PARALLAX EFFECT --- //
+
+const parallaxLayers = [
+  { el: document.querySelector('.wide-lichen'), factor: 0.2 },
+  { el: document.querySelector('.wind-landscape'), factor: 0.2 },
+  { el: document.querySelector('.candleholder1'), factor: 0.2 }
+];
+
+let mouseX = 0, mouseY = 0;
+let parallaxX = 0, parallaxY = 0;
+
+// Track mouse position (centered around 0,0)
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth) - 0.5; // -0.5 to +0.5
+  mouseY = (e.clientY / window.innerHeight) - 0.5;
+});
+
+function updateParallax() {
+  parallaxX += (mouseX - parallaxX) * 0.1;
+  parallaxY += (mouseY - parallaxY) * 0.1;
+
+  parallaxLayers.forEach(layer => {
+    if (!layer.el) return;
+    const moveX = parallaxX * layer.factor * 200; // Increase intensity
+    const moveY = parallaxY * layer.factor * 200;
+    layer.el.style.transform = `translate(${moveX}px, ${moveY}px)`; // ✅ Apply transform
+  });
+
+  requestAnimationFrame(updateParallax);
+}
+
+updateParallax();
+  </script>
+</body>
+</html>
