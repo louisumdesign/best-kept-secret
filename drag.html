@@ -261,18 +261,18 @@
     <img src="Main image for web2.png" alt="main2" class="main-image2" />
     <img src="candleholder1.gif" alt="candleholder1" class="candleholder1"/>
     <img src="road-video.gif" alt="road" class="road-video" />  
-    <img src="Landscape.gif" alt="windlandscape" class="wind-landscape" />
-    <img src="Landscape-Lichen.gif" alt="widelichen" class="wide-lichen" />
-    <img src="Lichen-on-rock.gif" alt="lichenrock" class="rock-lichen" />
-    <img src="Wind+water.gif" alt="windwater" class="wind-water" />
-    <img src="smooth.gif" alt="smoothwater" class="smooth-water" />
-    <img src="rippled.gif" alt="rippledwater" class="rippled-water" />
-    <video src="MP4 - windsquare.mp4" alt="windsquare" class="wind-square" 
+    <img src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/Landscape.gif" alt="windlandscape" class="wind-landscape" />
+    <img src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/Landscape-Lichen.gif" alt="widelichen" class="wide-lichen" />
+    <img src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/Lichen-on-rock.gif" alt="lichenrock" class="rock-lichen" />
+    <img src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/Wind%2Bwater.gif" alt="windwater" class="wind-water" />
+    <img src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/smooth.gif" alt="smoothwater" class="smooth-water" />
+    <img src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/rippled.gif" alt="rippledwater" class="rippled-water" />
+    <video src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/MP4%20-%20windsquare.mp4" alt="windsquare" class="wind-square" 
     autoplay
   loop
   muted
   playsinline></video>   
-  <video src="river1.mp4" alt="river1" class="river-1" 
+  <video src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/river1.mp4" alt="river1" class="river-1" 
     autoplay
   loop
   muted
@@ -282,22 +282,22 @@
   loop
   muted
   playsinline></video>   
-  <video src="Jake on rocks.mp4" alt="jakeriver" class="jake-river" 
+  <video src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/Jake%20on%20rocks.mp4" alt="jakeriver" class="jake-river" 
     autoplay
   loop
   muted
   playsinline></video>  
-  <video src="fog move.mp4" alt="fogmove" class="fog-move" 
+  <video src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/fog%20move.mp4" alt="fogmove" class="fog-move" 
     autoplay
   loop
   muted
   playsinline></video> 
-  <video src="tree sun.mp4" alt="treesun" class="tree-sun" 
+  <video src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/tree%20sun.mp4" alt="treesun" class="tree-sun" 
     autoplay
   loop
   muted
   playsinline></video> 
-  <video src="minifall.mp4" alt="minifall" class="mini-fall" 
+  <video src="https://pub-0c07d258a5c84975958287c8179dab5e.r2.dev/minifall.mp4" alt="minifall" class="mini-fall" 
     autoplay
   loop
   muted
@@ -601,6 +601,8 @@ function fadeOutWithDelay(audio, delay = 3000, duration = 2000) {
 document.getElementById("wind1").volume = 0.3;
 document.getElementById("big-river").volume = 0.3;
 
+let showHotspots = false;
+
     hotspots.forEach((h) => {
     const box = document.createElement("div");
     box.classList.add("hotspot-box");
@@ -612,11 +614,14 @@ document.getElementById("big-river").volume = 0.3;
     box.style.border = "2px dashed red";
     box.style.background = "rgba(255, 0, 0, 0.2)";
     box.style.zIndex = 9999;
+
+    box.style.display = "none";
+    
     canvas.appendChild(box);
     h.debugBox = box;
   });
 
-  let showHotspots = true;
+  
   document.addEventListener("keydown", (e) => {
     if (e.key.toLowerCase() === "h") {
       showHotspots = !showHotspots;
